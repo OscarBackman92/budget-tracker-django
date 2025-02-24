@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
+    'whitenoise',  # ✅ WhiteNoise for serving static files
 
     # ✅ Django Allauth for authentication
     'allauth',
@@ -60,6 +61,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    
+    # ✅ WhiteNoise Middleware (Must be directly below SecurityMiddleware)
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -70,7 +75,6 @@ MIDDLEWARE = [
     # ✅ Required for Django Allauth
     'allauth.account.middleware.AccountMiddleware',
 ]
-
 
 # REST Framework Authentication Settings
 REST_FRAMEWORK = {
@@ -172,7 +176,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"  # Where static files will be served from
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # ✅ Required for Heroku
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # Where static files are stored
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
