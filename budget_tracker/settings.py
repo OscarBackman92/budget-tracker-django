@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+import dj_database_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-uq%&m*5k0u=nox3a8#oh)ixu_k+q+0ar^_(_md(3-9#&a-v6c='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
@@ -89,9 +94,9 @@ SIMPLE_JWT = {
 
 # Django Allauth Settings
 ACCOUNT_LOGIN_METHODS = {"username"}
-ACCOUNT_EMAIL_REQUIRED = False  # Set to True if you want email-based authentication
+ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Set to "mandatory" if using email verification
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 ROOT_URLCONF = 'budget_tracker.urls'
 
@@ -117,13 +122,21 @@ WSGI_APPLICATION = 'budget_tracker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    # ✅ Use SQLite in Development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(os.path.dirname(__file__), "db.sqlite3"),
+        }
     }
-}
-
+    print("🛠️ Running in Development Mode (Using SQLite)")
+else:
+    # ✅ Use PostgreSQL in Production
+    DATABASES = {
+        "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    }
+    print("🚀 Running in Production Mode (Using PostgreSQL)")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -165,3 +178,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ✅ Print the connected database
+print(f"🔍 Connected to database: {DATABASES['default']['ENGINE']}")
+print(f"🔗 Database URL: {DATABASES['default'].get('NAME', 'No Database URL')}")  # Shows DB name or URL
