@@ -100,6 +100,8 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
+REST_USE_JWT = True # ✅ Use JWT for authentication
+
 # Django Allauth Settings
 ACCOUNT_LOGIN_METHODS = {"username"}
 ACCOUNT_EMAIL_REQUIRED = False
