@@ -37,11 +37,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # ✅ Django Allauth for authentication
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',  # Optional: Only needed if using social login
+
+    # ✅ DRF and authentication libraries
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
     'transactions',
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -50,7 +60,36 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # ✅ Required for Django Allauth
+    'allauth.account.middleware.AccountMiddleware',
 ]
+
+
+# REST Framework Authentication Settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+# Simple JWT Settings
+from datetime import timedelta
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+}
+
+# Django Allauth Settings
+ACCOUNT_LOGIN_METHODS = {"username"}
+ACCOUNT_EMAIL_REQUIRED = False  # Set to True if you want email-based authentication
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Set to "mandatory" if using email verification
 
 ROOT_URLCONF = 'budget_tracker.urls'
 
