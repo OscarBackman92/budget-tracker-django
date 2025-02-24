@@ -140,13 +140,11 @@ if DEBUG:
             "NAME": os.path.join(os.path.dirname(__file__), "db.sqlite3"),
         }
     }
-    print("🛠️ Running in Development Mode (Using SQLite)")
 else:
     # ✅ Use PostgreSQL in Production
     DATABASES = {
         "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
     }
-    print("🚀 Running in Production Mode (Using PostgreSQL)")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
