@@ -48,9 +48,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
+    'django_extensions',
     'whitenoise',  # ✅ WhiteNoise for serving static files
     "corsheaders",
-    # ✅ Django Allauth for authentication
     'allauth',
     'allauth.account',
     'allauth.socialaccount',  # Optional: Only needed if using social login
