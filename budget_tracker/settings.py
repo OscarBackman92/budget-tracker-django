@@ -33,7 +33,8 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = [
     "localhost", 
     "127.0.0.1",
-    "oscar-budget-990d30eb0b3c.herokuapp.com",  # ✅ Add your Heroku URL here
+    "oscar-budget-990d30eb0b3c.herokuapp.com",
+    "http://localhost:3000",
 ]
 
 
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'whitenoise',  # ✅ WhiteNoise for serving static files
-
+    "corsheaders",
     # ✅ Django Allauth for authentication
     'allauth',
     'allauth.account',
@@ -68,7 +69,7 @@ MIDDLEWARE = [
     
     # ✅ WhiteNoise Middleware (Must be directly below SecurityMiddleware)
     'whitenoise.middleware.WhiteNoiseMiddleware',
-
+    "corsheaders.middleware.CorsMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -99,6 +100,12 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True 
 
 REST_USE_JWT = True # ✅ Use JWT for authentication
 
